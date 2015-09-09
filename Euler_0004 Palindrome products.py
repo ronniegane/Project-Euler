@@ -1,7 +1,13 @@
-# Palindrome product
-# two three digit numbers
+'''Project Euler problem 4: largest palindrome product
+A palindromic number reads the same both ways.
+The largest palindrome made from the product of two 2-digit numbers
+is 9009 = 91 * 99.
+Find the largest palindrome made from the product of two 3-digit numbers.'''
+
+
 # Biggest possible product is 998001
-# Run exhaustively through three-digit factors? 1m calculations
+
+# Run exhaustively through three-digit factors: 1m calculations
 from math import sqrt, floor
 maxPalindrome = 0
 for a in range(100,999):

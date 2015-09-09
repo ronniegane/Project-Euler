@@ -10,7 +10,9 @@ from math import sqrt, floor
 myNum = 600851475143
 halfway = int(floor(sqrt(myNum)))
 
-print(sqrt(600851475143))
+# print(sqrt(600851475143))
+
+# First work out all the factors of the myNum, including non-primes
 factorsOfNum = []
 for possible in range(2, halfway): # possible factors of myNum
     if myNum % possible == 0:
@@ -18,8 +20,8 @@ for possible in range(2, halfway): # possible factors of myNum
         factorsOfNum.append(possible)
 
 maxFactor = 0
-print("Factors of number")
-print(factorsOfNum)
+# print("Factors of number")
+# print(factorsOfNum)
 # check factors for primality
 for factor in factorsOfNum:
     for x in range(2, floor(sqrt(factor))):

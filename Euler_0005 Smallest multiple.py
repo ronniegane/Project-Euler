@@ -1,3 +1,11 @@
+'''Project Euler problem 5: Smallest multiple
+2520 is the smallest number that can be divided
+by each of the numbers from 1 to 10 without any remainder.
+
+What is the smallest positive number that is
+evenly divisible by all of the numbers from 1 to 20?'''
+
+
 # Greatest common divisor function (needed for finding LCM)
 def gcd(a, b):
     ''' finds the greatest common divisor of two integers a and b using Euclidean algorithm. '''
@@ -17,9 +25,6 @@ def lcm(a, b):
     return int(a*b/gcd(a, b))
 
 # print(lcm(21, 6))
-
-# smallest possible number divisible by all integers from 1 to N
-# we could start with the number N! but that would be quite large
 
 # go through from 1 to N
 # first find lowest common multiple of 1 to 2, then of this LCM to 3, and so on
