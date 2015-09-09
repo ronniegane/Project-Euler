@@ -16,8 +16,11 @@ What is the total of all the name scores in the file?'''
 # import names.txt into a list of strings
 infile = open('p022_names.txt', 'r')
 nameList = infile.read().replace('"',"").split(',')
+#close the file
+infile.close()
+
 nameList.sort() # put in alphabetical order
-print(nameList[:10])
+# print(nameList[:10])
 
 # make a dictionary for alphabetical scoring
 alphaScore = {}
@@ -29,8 +32,13 @@ for i in range(len(alphabet)):
 
 # score each name
 scores = []
-for name in nameList:
-    pass
 
-#close the file
-infile.close()
+for x in range(len(nameList)):
+    myScore = 0
+    name = nameList[x]
+    for letter in name:
+        myScore += alphaScore[letter]
+    scores.append(myScore*(x+1))
+
+print("Total score of all names is %s" % sum(scores))
+
