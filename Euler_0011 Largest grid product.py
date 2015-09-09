@@ -61,9 +61,27 @@ for i in range(n-numAdj):
             maxProduct = product
 
 # check diagonal (down-right) products
-
+for i in range(n-numAdj):
+    for j in range(n-numAdj):
+        product = 1
+        for index in range(numAdj):
+            product *= int(gridList[i+index][j+index])
+        if product > maxProduct:
+            sol = (i, j, 'down-right')
+            maxProduct = product            
+        
+        
 # check diagonal (up-right) products
+for i in range(numAdj-1, n):
+    for j in range(n-numAdj):
+        product = 1
+        for index in range(numAdj):
+            product *= int(gridList[i-index][j+index])
+        if product > maxProduct:
+            sol = (i, j, 'up-right')
+            maxProduct = product
 
+# possibly could improve by combination: check all products in one master loop
 
 print("The max product is %s which is found starting at coordinates %s i, %s j\
       and moving %s places in a %s direction" % (maxProduct, sol[0], sol[1], numAdj, sol[2]))
