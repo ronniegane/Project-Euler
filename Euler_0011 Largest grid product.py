@@ -25,5 +25,45 @@ grid = '''08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
 
 # print(grid)
 
-n = 20
-# split into a 20x20 list of lists
+'''Parameters'''
+
+numAdj = 4 # amount of adjacent numbers to check
+n = 20 # dimension of square grid
+
+# split into a n x n list of lists
+gridList = []
+for x in range(0,n**2,n):
+    gridList.append(grid[x:x+n])
+
+# print(gridList)
+
+maxProduct = 0
+# check horizontal adjacent products
+
+
+for i in range(n):
+    for j in range(n-numAdj):
+        product = 1
+        for num in gridList[i][j:j+numAdj]:
+            product *= int(num)
+        if product > maxProduct:
+            sol = (i, j, 'right')
+            maxProduct = product
+
+# check vertical adjacent products
+for i in range(n-numAdj):
+    for j in range(n):
+        product = 1
+        for num in gridList[i+numAdj][j]:
+            product *= int(num)
+        if product > maxProduct:
+            sol = (i, j, 'down')
+            maxProduct = product
+
+# check diagonal (down-right) products
+
+# check diagonal (up-right) products
+
+
+print("The max product is %s which is found starting at coordinates %s i, %s j\
+      and moving %s places in a %s direction" % (maxProduct, sol[0], sol[1], numAdj, sol[2]))
