@@ -19,3 +19,10 @@ Find the value of d < 1000 for which 1/d contains
 the longest recurring cycle in its decimal fraction part.
 """
 
+for d in range(1,1000):
+    frac = 1/d
+    looping = True
+    index = 2
+    while looping:
+        # How do we recognise a true recurring cycle as opposed to a
+        # few consecutive numbers?
