@@ -49,29 +49,34 @@ def isPrime(a):
         primeDict[a] = True
         return True
 
-maxN = 0
-maxA = 0
-maxB = 0
+def main():
+    maxN = 0
+    maxA = 0
+    maxB = 0
 
-# Loop through coefficients
-for b in range(1,1000): # note that b must be >1 otherwise the first result with n=0 is non-prime
-    for a in range(-b,1000): # a must be > -b for n=1 =. 1 + a + b to make a prime >1
-        # print("a: %s b: %s" % (a,b))
-        # Work out the results of n**2 + an + b, stopping when a non-prime is found
-        n = 0
-        s = b
-        while isPrime(s):
-            # print("%s is a prime" % s)
-            n += 1
-            s = n**2 + a*n + b
-        # Check if this is a new max
-        #print("Reached %s consecutive primes." % n)
-        if n > maxN:
-            maxN = n
-            maxA = a
-            maxB = b
-            print("New max N: %s with a = %s and b = %s" % (maxN, maxA, maxB))
+    # Loop through coefficients
+    for b in range(1,1000): # note that b must be >1 otherwise the first result with n=0 is non-prime
+        for a in range(-b,1000): # a must be > -b for n=1 =. 1 + a + b to make a prime >1
+            # print("a: %s b: %s" % (a,b))
+            # Work out the results of n**2 + an + b, stopping when a non-prime is found
+            n = 0
+            s = b
+            while isPrime(s):
+                # print("%s is a prime" % s)
+                n += 1
+                s = n**2 + a*n + b
+            # Check if this is a new max
+            #print("Reached %s consecutive primes." % n)
+            if n > maxN:
+                maxN = n
+                maxA = a
+                maxB = b
+                print("New max N: %s with a = %s and b = %s" % (maxN, maxA, maxB))
 
-print("Product of the coefficients is %s" % (maxA*maxB))
-        
-        
+    print("Product of the coefficients is %s" % (maxA*maxB))
+    
+if __name__ == '__main__':
+    main()
+
+
+

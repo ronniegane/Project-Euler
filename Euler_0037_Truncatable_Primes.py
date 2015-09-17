@@ -11,4 +11,4 @@ NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes.
 '''
 
 # Use isPrime code from previous works
-import 'Euler_0027 Quadratic Primes'
+import Euler_0027_Quadratic_Primes
