@@ -39,8 +39,35 @@ un = 1 − n + n**2 − n**3 + n**4 − n**5 + n**6 − n**7 + n**8 − n**9 + n
 
 Find the sum of FITs for the BOPs.'''
 
+##def matMult(matA, matB): # defining our own matrix multiplication if we don't use numpy
+##    outMatrix = [[matA[i]* for col in matB]
+
+import numpy as np  # we will use numpy for array functions
+
 # Tenth order polynomial will be fitted when k = 10
+maxN = 10
 # So we will try to make fitted polynomials for k from 1 to 9
 # And we will require up to 10 terms to check against
-realSequence = [1 - n + n**2 - n**3 + n**4 - n**5 + n**6 - n**7 + n**8 - n**9 + n**10 for n in range(1, 11)]
+realSequence = [1 - n + n**2 - n**3 + n**4 - n**5 + n**6 - n**7 + n**8 - n**9 + n**10 for n in range(1, maxN + 1)]
 print(realSequence)
+
+fitSum = 0
+fullXArray = np.array([np.array([float(x) for x in range(1,maxN+1)])**b for b in range(maxN+1)])
+print(fullXArray) # need to cast to floats to avoid integer overflow at 9**10
+
+for k in range(1, maxN):
+    subSeq = np.array(realSequence[:k]) # this is our y vector
+    #print(subSeq)
+    xCol = np.array(range(1,k+1))# this is our x-vector of numbers
+    xArray = np.array([xCol**b for b in range(k)]) # this is our X array in Xa = y
+    #print(xArray)
+    # To solve for a (vector of coefficients), we use linear regression
+    # a = ((XtX)**-1)*Xt*y
+    xTxArray = xArray*np.transpose(xArray)
+    a = np.linalg.inv(xTxArray)*xArray*subSeq
+
+    # Matrix Multiplication in Numpy might need to use .dot() method. Bit confusing.
+    
+    print(a)
+    aExtended = a.a
+    predictSeq = 0
