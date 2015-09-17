@@ -34,7 +34,9 @@ def isPrime(a):
     '''Returns True if a number is prime, False if not
     (calculated through trial division)'''
     # numbers <=1 can't be prime
+    global primeDict
     if a <= 1:
+        primeDict[a] = False
         return False
     if a in primeDict: # if we have encountered this number before, save some time
         return primeDict[a]
