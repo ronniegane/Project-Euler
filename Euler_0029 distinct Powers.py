@@ -15,9 +15,11 @@ a**b for 2 ≤ a ≤ 100 and 2 ≤ b ≤ 100?'''
 
 # Should be pretty straightforward with sets or dictionaries
 
-powerList = set()
+powerSet = set()
 
 
 for a in range(2, 101):
     for b in range(2, 101):
-        
+        powerSet.add(a**b)
+
+print("%s distinct terms" % len(powerSet))
