@@ -7,6 +7,10 @@ package projecteuler_java;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.floor;
+import static java.lang.Math.sqrt;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -41,7 +45,7 @@ public class ProjectEuler_Java {
         }
                 
         // Checks primality by simple trial division
-        for(int i = 2; i < java.lang.Math.sqrt(x); i++){
+        for(int i = 2; i < sqrt(x); i++){
             if (floor(x) % i == 0){
                 return false;
             }
@@ -51,9 +55,45 @@ public class ProjectEuler_Java {
     
     public static double largestPrimeFactor(double x){
         System.out.println(x);
-        // Work out all factors
+        List myFactors = new ArrayList();
+        
+        int index;
+        index = 0;
+        int j;
+        
+        x = floor(x);
+        
+        for(int i = 2; i < sqrt(x); i++){
+            if (x % i < 0.0001){
+                // x = i * j. Add to list of factors
+                myFactors.add(i);
+                j = (int) (x / i);
+                myFactors.add(j);
+                index += 2;
+            }
+        }
+        
+        // Print factors array
+        System.out.println(myFactors);
+        
+        List primeFactors = new ArrayList();
         // Check if a factor is prime
-        return 1.0;
+        for(int i = 0; i < myFactors.size(); i++){
+            if (isPrime(myFactors.get(i))){
+                primeFactors.add(myFactors.get(i));
+            }
+        }
+        return max(primeFactors);
+    }
+
+    private static double max(int[] myArray) {
+        int maxVal = 0; // we are assuming at least one positive value in the array
+        for(int i=0; i<myArray.length; i++){
+            if(myArray[i]>maxVal){
+                maxVal = myArray[i];
+            }
+        }
+        return maxVal;
     }
     
     
