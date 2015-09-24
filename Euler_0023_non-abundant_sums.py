@@ -20,6 +20,7 @@ written as the sum of two abundant numbers.'''
 
 # find divisors
 from math import sqrt, floor
+
 def findDivisors(n):
     '''Returns a list of all divisors of n including n itself'''
     divisors = []
@@ -32,6 +33,8 @@ def findDivisors(n):
 
 # find sum of a numbers divisors
 def divisorSum(n):
+    '''Returns the sum of all divisors of a number n.
+    Includes 1, but excludes n itself.'''
     myDivisors = findDivisors(n)
     myDivisors.remove(n)
     #print(myDivisors)
@@ -47,22 +50,28 @@ abundantList = []
 # build a list of abundant numbers from 1 to 28123
 for x in range(1, 28124):
     if x < divisorSum(x):
-        # x is abundant
+        # x is abundant if smaller than the sum of its divisors
         abundantList.append(x)
 
 #print(abundantList)
-print("there are %s abundant numbers." % len(abundantList))
-'''There are 6965 abundant numbers in this list. Therefore there are 6965**2 = 48511225
-possible combinations of two abundant numbers.'''
+print("there are %s abundant numbers up to 28123." % len(abundantList))
 
-# start with a set of numbers
+'''There are 6965 abundant numbers in this list. Therefore there
+are 6965**2 = 48511225 possible combinations of two abundant numbers.'''
+
+# start with the full set of numbers up to 28123
 numSet = set(range(1,28124))
+
+# remove numbers from this set if each 
 for i in range(len(abundantList)):
-    for j in range(len(abundantList)):
+    for j in range(i, len(abundantList)): # start from index i to
+                                          # avoid checking same sum twice
         thisSum = abundantList[i] + abundantList[j]
         if thisSum in numSet:
             numSet.remove(thisSum)
 
-print(numSet)
+# print(numSet)
+print("There are %s numbers that cannot be made from the sum of "
+      "two abundant numbers." % len(numSet))
 print("The sum of these numbers is %s" % sum(numSet))
         
