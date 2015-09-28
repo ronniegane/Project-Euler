@@ -17,24 +17,38 @@ of the most consecutive primes?'''
 # if cached file is present, and checksum matches, then carry on
 # otherwise, overwrite
 
+from math import sqrt
+
+# Timing code
+import time
+start_time = time.time()
 
 
 # create ordered list of primes
 # Seive of Erastothenes approach
 # Start with all numbers 2-1million
-primeMax = 100
-primeList = list(range(2,primeMax+1))
-index = 0
-while index < len(primeList):
-    pNum = primeList[index] # this will be the next prime number
-    for nonPrime in range(2*pNum, primeMax+1, pNum):
-        # Remove all multiples of this number from the list
-        if nonPrime in primeList:
-            primeList.remove(nonPrime)
-    index += 1
+primeMax = 1000000
 
-print(primeList)
-    
+mySieve = [True]*primeMax # all numbers start as prime
 
+for i in range(3,int(sqrt(primeMax))+1,2):
+    if mySieve[i]:
+        for mult in range(2*i, primeMax, i):
+            mySieve[mult] = False
 
-# read primes from disk into list
+primeList = [2] + [i for i in range(3, primeMax, 2) if mySieve[i]]
+
+print("Primes up to %s: found %s primes" % (primeMax, len(primeList)))
+print("---Completed in %s seconds---" %(time.time() - start_time))
+
+''' there are 78498 primes below 1 million.
+number of possible consecutive combinations:
+1 x 78498 sequential numbers
+2 x 78497
+3 x 78496
+...
+78498 x 1'''
+
+# stop if the current biggest number is larger than the largest
+# possible sum of the current length
+
