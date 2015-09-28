@@ -27,10 +27,10 @@ start_time = time.time()
 # create ordered list of primes
 # Seive of Erastothenes approach
 # Start with all numbers 2-1million
-primeMax = 100
+primeMax = 10000
 
-mySieve = [True]*primeMax # all numbers start as prime
-
+mySieve = [False,False,True]+[True, False]*primeMax # all odd numbers and 2 start as prime
+print(mySieve[:10])
 for i in range(3,int(sqrt(primeMax))+1,2):
     if mySieve[i]:
         for mult in range(2*i, primeMax, i):
@@ -41,7 +41,12 @@ primeList = [2] + [i for i in range(3, primeMax, 2) if mySieve[i]]
 print("Primes up to %s: found %s primes" % (primeMax, len(primeList)))
 print("---Completed in %s seconds---" %(time.time() - start_time))
 
-# print(primeList[-50:])
+#print([(x, mySieve[x]) for x in range(30)])
+#print(primeList[:30])
+
+# Making a dictionary for lookup
+# primeDict = {x: mySieve[x] for x in range(primeMax)}
+# Dictionaries don't work well because there are many values we try to lookup outside the prime range
 
 ''' there are 78498 primes below 1 million.
 number of possible consecutive combinations:
@@ -76,12 +81,14 @@ for seqSize in range(maxLen,0,-1):
             thisList = primeList[-offset-seqSize:-offset] # has problems when offset = 0
            
         thisSum = sum(thisList)
+        if thisSum > primeList[-1]:
+            continue
         #if seqSize == 6:
             #print(thisList)
             #print("Checking %s length sequence at offset %s: sum %s" % (seqSize, offset, thisSum))
         #print(thisSum)
 
-        if thisSum in primeSet: 
+        if thisSum in primeSet:
             # thisSum is a prime
             maxSum = thisSum
             maxList = thisList
@@ -99,11 +106,11 @@ print("---Completed in %s seconds---" %(time.time() - start_time))
 
 
 '''Time performance:
-n       primeList    maxList  maxList(sets)
+n       primeList    maxList  maxList(sets) maxList (dict)
 100       0.0156      0.0312   0.006
 1000      0.0156      0.1404   0.062
-10000     0.0156     14.2964   3.603
-100000
+10000     0.0156     14.2964   3.603        3.6604
+100000    0.1248        -        -
 1000000
 
 currently max list time is O(n**2) with n being max number.
