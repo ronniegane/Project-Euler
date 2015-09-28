@@ -27,7 +27,7 @@ start_time = time.time()
 # create ordered list of primes
 # Seive of Erastothenes approach
 # Start with all numbers 2-1million
-primeMax = 1000
+primeMax = 100
 
 mySieve = [True]*primeMax # all numbers start as prime
 
@@ -40,6 +40,8 @@ primeList = [2] + [i for i in range(3, primeMax, 2) if mySieve[i]]
 
 print("Primes up to %s: found %s primes" % (primeMax, len(primeList)))
 print("---Completed in %s seconds---" %(time.time() - start_time))
+
+# print(primeList[-50:])
 
 ''' there are 78498 primes below 1 million.
 number of possible consecutive combinations:
@@ -61,6 +63,7 @@ making shorter sequences each time,
 we can stop at the first one we find. 
 '''
 
+start_time = time.time()
 maxLen = len(primeList)
 maxSum = 0
 
@@ -70,18 +73,23 @@ for seqSize in range(maxLen,0,-1):
             thisList = primeList[-seqSize:]
         else:            
             thisList = primeList[-offset-seqSize:-offset] # has problems when offset = 0
-        #print(thisList)
+           
         thisSum = sum(thisList)
-        print("Checking %s length sequence at offset %s: sum %s" % (seqSize, offset, thisSum))
+        #if seqSize == 6:
+            #print(thisList)
+            #print("Checking %s length sequence at offset %s: sum %s" % (seqSize, offset, thisSum))
         #print(thisSum)
 
-        if thisSum in primeList:
+        if thisSum in primeList:  # getting the right sums, but not recognising them as prime
             # thisSum is a prime
             maxSum = thisSum
             maxList = thisList
             break
+    else:
+        continue
+    break # Will exit the outer loop if the inner loop breaks
 
 print("Maximum length sum of primes that is also prime below %s:" % primeMax)
 print(maxList)
 print("Total sum: %s " % maxSum)
-
+print("---Completed in %s seconds---" %(time.time() - start_time))
