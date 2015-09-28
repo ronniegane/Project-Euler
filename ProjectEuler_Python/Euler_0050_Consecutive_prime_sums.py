@@ -27,7 +27,7 @@ start_time = time.time()
 # create ordered list of primes
 # Seive of Erastothenes approach
 # Start with all numbers 2-1million
-primeMax = 100
+primeMax = 10000
 
 mySieve = [True]*primeMax # all numbers start as prime
 
@@ -91,5 +91,17 @@ for seqSize in range(maxLen,0,-1):
 
 print("Maximum length sum of primes that is also prime below %s:" % primeMax)
 print(maxList)
-print("Total sum: %s " % maxSum)
+print("%s primes with total sum: %s " % (len(maxList),maxSum))
 print("---Completed in %s seconds---" %(time.time() - start_time))
+
+
+
+
+'''Time performance:
+n       primeList    maxList
+100       0.0156      0.0312
+1000      0.0156      0.1404
+10000     0.0156     14.2964
+100000
+1000000
+'''
