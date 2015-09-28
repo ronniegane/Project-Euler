@@ -27,7 +27,7 @@ start_time = time.time()
 # create ordered list of primes
 # Seive of Erastothenes approach
 # Start with all numbers 2-1million
-primeMax = 1000000
+primeMax = 1000
 
 mySieve = [True]*primeMax # all numbers start as prime
 
@@ -43,12 +43,45 @@ print("---Completed in %s seconds---" %(time.time() - start_time))
 
 ''' there are 78498 primes below 1 million.
 number of possible consecutive combinations:
-1 x 78498 sequential numbers
-2 x 78497
-3 x 78496
+1 @ 78498 sequential numbers
+2 @ 78497
+3 @ 78496
 ...
-78498 x 1'''
+78498 @ 1
 
-# stop if the current biggest number is larger than the largest
-# possible sum of the current length
+so sum of 1 to n = n(n+1)/2 which in our case means
+that we have 78498*78499/2 = 3,081,007,251 sequences to sum up and check.
+
+for primeMax = 1000, there are 168 primes,
+so 14,196 sequences to sum up and check.
+
+Since we're looking for the longest consecutive sequence,
+if we start with the longest possible sequence and loop through
+making shorter sequences each time,
+we can stop at the first one we find. 
+'''
+
+maxLen = len(primeList)
+maxSum = 0
+
+for seqSize in range(maxLen,0,-1):
+    for offset in range(maxLen-seqSize+1):
+        if offset == 0:
+            thisList = primeList[-seqSize:]
+        else:            
+            thisList = primeList[-offset-seqSize:-offset] # has problems when offset = 0
+        #print(thisList)
+        thisSum = sum(thisList)
+        print("Checking %s length sequence at offset %s: sum %s" % (seqSize, offset, thisSum))
+        #print(thisSum)
+
+        if thisSum in primeList:
+            # thisSum is a prime
+            maxSum = thisSum
+            maxList = thisList
+            break
+
+print("Maximum length sum of primes that is also prime below %s:" % primeMax)
+print(maxList)
+print("Total sum: %s " % maxSum)
 
