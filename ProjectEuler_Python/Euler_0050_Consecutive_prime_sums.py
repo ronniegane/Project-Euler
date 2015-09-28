@@ -27,7 +27,7 @@ start_time = time.time()
 # create ordered list of primes
 # Seive of Erastothenes approach
 # Start with all numbers 2-1million
-primeMax = 10000
+primeMax = 100
 
 mySieve = [True]*primeMax # all numbers start as prime
 
@@ -65,6 +65,7 @@ we can stop at the first one we find.
 
 start_time = time.time()
 maxLen = len(primeList)
+primeSet = set(primeList)
 maxSum = 0
 
 for seqSize in range(maxLen,0,-1):
@@ -80,7 +81,7 @@ for seqSize in range(maxLen,0,-1):
             #print("Checking %s length sequence at offset %s: sum %s" % (seqSize, offset, thisSum))
         #print(thisSum)
 
-        if thisSum in primeList:  # getting the right sums, but not recognising them as prime
+        if thisSum in primeSet: 
             # thisSum is a prime
             maxSum = thisSum
             maxList = thisList
@@ -98,10 +99,13 @@ print("---Completed in %s seconds---" %(time.time() - start_time))
 
 
 '''Time performance:
-n       primeList    maxList
-100       0.0156      0.0312
-1000      0.0156      0.1404
-10000     0.0156     14.2964
+n       primeList    maxList  maxList(sets)
+100       0.0156      0.0312   0.006
+1000      0.0156      0.1404   0.062
+10000     0.0156     14.2964   3.603
 100000
 1000000
+
+currently max list time is O(n**2) with n being max number.
+the number of primes below n is roughly O(n) so 
 '''
