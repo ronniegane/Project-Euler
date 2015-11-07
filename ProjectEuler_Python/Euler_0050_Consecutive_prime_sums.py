@@ -16,6 +16,7 @@ of the most consecutive primes?'''
 # maybe cache this list to disk to keep around?
 # if cached file is present, and checksum matches, then carry on
 # otherwise, overwrite
+# calculating primes below 1,000,000 only takes 0.28 seconds, so not a huge bottleneck
 
 from math import sqrt
 
@@ -23,12 +24,13 @@ from math import sqrt
 import time
 start_time = time.time()
 
+# SEARCH PARAMETERS
+primeMax = 1000000
+minSize = 183
 
 # create ordered list of primes
 # Seive of Erastothenes approach
-# Start with all numbers 2-1million
-primeMax = 1000000
-minSize = 183
+# Start with all numbers 2-1million (or other maximum)
 
 mySieve = [False,False,True]+[True, False]*primeMax # all odd numbers and 2 start as prime
 
@@ -38,51 +40,50 @@ for i in range(3,int(sqrt(primeMax))+1,2):
             mySieve[mult] = False
 
 primeList = [2] + [i for i in range(3, primeMax, 2) if mySieve[i]]
-primeSet = set(primeList)
+primeSet = set(primeList)  # Create a set for checking if a sum is prime
 
 print("Primes up to %s: found %s primes" % (primeMax, len(primeList)))
 print("---Completed in %s seconds---" %(time.time() - start_time))
-
-#print([(x, mySieve[x]) for x in range(30)])
-#print(primeList[:30])
 
 # Making a dictionary for lookup
 # primeDict = {x: mySieve[x] for x in range(primeMax)}
 # Dictionaries don't work well because there are many values we try to lookup outside the prime range
 
-''' there are 78498 primes below 1 million.
+'''
+There are 78498 primes below 1 million.
 
 BUT, we want our summed prime to be 1 million or below.
 So really the maximum "end number" of our sequence
 is one where it and the 20 previous numbers is just under a million, because we know
 our max length of consecutive primes must be >= 21
 
-This leaves us with 4898 primes.  (Or first 5144 primes?? output seems different)
-If we use knowledge from prime sum under 100,000 we know we are looking for a
-sequence of length >= 183, so we can put this as our minSize.
-This cuts down the number of primes to cycle through to 818.
+This leaves us with 5144 primes.
+
 
 number of possible consecutive combinations:
-1 @ 4898 sequential numbers
-2 @ 4897
-3 @ 4986
+1 @ 5144 sequential numbers
+2 @ 5143
+3 @ 5142
 ...
-4898 @ 1
+5144 @ 1
 
 so sum of 1 to n = n(n+1)/2 which in our case means
-that we have 4898*4899/2 = 11,997,651 sequences to sum up and check.
+that we have 5144*5145/2 = 13,232,940 sequences to sum up and check.
 
-for primeMax = 1000, there are 168 primes,
-so 14,196 sequences to sum up and check.
+If we use knowledge from prime sum under 100,000 we know we are looking for a
+sequence of length >= 183, so we can put this as our minSize.
+This cuts down the number of primes to cycle through to 818, which
+means just 334,971 sequences to check.
+
 
 The longest consecutive sequence for each max length:
 100:
 [2, 3, 5, 7, 11, 13]
-sum = 41
+6 primes with total sum: 41
 
 1000:
 [7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89]
-sum = 953
+21 primes with total sum: 953
 
 10,000:
 [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317]
@@ -102,14 +103,11 @@ making shorter sequences each time,
 we can stop at the first one we find. 
 '''
 
-'''find the maximum prime we should be looking at
 
-'''
-# sum(primeList[x-minSize:x])
 primeSums = [sum(primeList[x-minSize:x-1]) for x in range(minSize,len(primeList)+1)]
 upToMax = [x for x in primeSums if (x < primeMax)]
 primeIndex = len(upToMax)+minSize
-# print(primeSums)
+
 print("Only need to consider first %s primes if sum < %s" % (primeIndex, primeMax))
 
 # Trim primeList
@@ -117,47 +115,23 @@ primeList = primeList[:primeIndex]
 
 
 start_time = time.time()
+
 maxLen = len(primeList)
 
-maxSum = 0
-
 for seqSize in range(maxLen, 0, -1):
-    #Trying something new
-    # sumList = [sum(primeList[a-seqSize:a]) for a in range(seqSize, maxLen+1)]
-    # Replacing with a for loop for debugging
-    sumList = []
-    for a in range(seqSize, maxLen+1):
-        thisSum = sum(primeList[a-seqSize:a])
-        sumList.append(thisSum)
-    # print(sumList)
+
+    sumList = [sum(primeList[a-seqSize:a]) for a in range(seqSize, maxLen+1)]
+
     if sumList[0] > primeMax:  # ignore this list if the smallest sum is still bigger than maximum prime
         continue
+
     offset = [sumList.index(x) for x in sumList if ((x < primeMax) and (x in primeSet))]
+
     if len(offset) > 0:
         # Found max sum
-        print(offset)
         maxList = primeList[offset[-1]:offset[-1]+seqSize]
         maxSum = sumList[offset[-1]]
         break
-##    for offset in range(maxLen-seqSize+1):
-##        if offset == 0:
-##            thisList = primeList[-seqSize:]
-##        else:            
-##            thisList = primeList[-offset-seqSize:-offset] # has problems when offset = 0
-##           
-##        thisSum = sum(thisList)
-##        if thisSum > primeList[-1]:
-##            continue
-##        #if seqSize == 6:
-##            #print(thisList)
-##            #print("Checking %s length sequence at offset %s: sum %s" % (seqSize, offset, thisSum))
-##        #print(thisSum)
-##
-##        if thisSum in primeSet:
-##            # thisSum is a prime
-##            maxSum = thisSum
-##            maxList = thisList
-##            break
     else:
         continue
     break # Will exit the outer loop if the inner loop breaks
