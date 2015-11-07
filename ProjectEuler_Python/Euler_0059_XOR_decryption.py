@@ -32,3 +32,38 @@ values in the original text.
 
 '''
 
+# Need a dictionary of common English words so we can score the produced cleartext
+# based on how much it resembles English.
+
+# Alternate approaches- letter frequency? Like in the python crypto book?
+
+
+# Import cyphertext as a list of digits. The format in the .txt file is integers separated by commas. 
+
+inFile = open('p059_cipher.txt','r')
+
+
+cyphertext = [int(x) for x in inFile.read().split(',')]
+print(cyphertext[:20])
+print(chr(cyphertext[3]))
+
+# The chr() function turns integers into Unicode characters (of which ASCII is a subset)
+
+inFile.close()
+
+# Brute-force approach
+# Decryption loop just needs to loop through all possible keys
+# Three lower-case characters (in ASCII, lower case alphabet characters are 97 to 122 inclusive)
+# This approach tries 26^3 = 17576 keys
+
+for a in range(97,123):
+    for b in range(97,123):
+        for c in range(97,123):
+            key = [a, b, c]
+            # Cycle over cyphertext
+            for i in range(len(cyphertext)):
+                # cleartext.append(cyphertext[i] XOR key[i % 3]) # XOR cyphertext integer with the key 
+
+
+    
+            
