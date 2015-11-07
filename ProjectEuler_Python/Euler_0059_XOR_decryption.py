@@ -37,6 +37,9 @@ values in the original text.
 
 # Alternate approaches- letter frequency? Like in the python crypto book?
 
+# Timing code
+import time
+start_time = time.time()
 
 # Import cyphertext as a list of digits. The format in the .txt file is integers separated by commas. 
 
@@ -44,6 +47,7 @@ inFile = open('p059_cipher.txt','r')
 
 
 cyphertext = [int(x) for x in inFile.read().split(',')]
+print("cyphertext is %s characters" % len(cyphertext))
 print(cyphertext[:20])
 print(chr(cyphertext[3]))
 
@@ -56,14 +60,28 @@ inFile.close()
 # Three lower-case characters (in ASCII, lower case alphabet characters are 97 to 122 inclusive)
 # This approach tries 26^3 = 17576 keys
 
+
+
 for a in range(97,123):
     for b in range(97,123):
         for c in range(97,123):
             key = [a, b, c]
-            # Cycle over cyphertext
-            for i in range(len(cyphertext)):
-                # cleartext.append(cyphertext[i] XOR key[i % 3]) # XOR cyphertext integer with the key 
+            # Cycle over cyphertext to create new cleartext
+            cleartext = [cyphertext[i] ^ key[i % 3] for i in range(len(cyphertext))]
+            # Test cleartext for English words
+            lettertext = ''.join([chr(x) for x in cleartext])
 
+print(cleartext[:20])
 
+print(lettertext)
     
-            
+print("---Completed in %s seconds---" %(time.time() - start_time))
+
+
+'''Time performance
+1201 chars in cyphertext
+completes in 7.9 seconds with .append() in for loop
+completes in 4.93 seconds with list comprehension
+
+after adding in list-to-string code with list comprehensions, takes 7.9 seconds 
+'''
