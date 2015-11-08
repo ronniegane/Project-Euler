@@ -18,15 +18,15 @@ of the most consecutive primes?'''
 # otherwise, overwrite
 # calculating primes below 1,000,000 only takes 0.28 seconds, so not a huge bottleneck
 
-from math import sqrt
+from math import sqrt, log10
 
 # Timing code
 import time
 start_time = time.time()
 
 # SEARCH PARAMETERS
-primeMax = 1000000
-minSize = 183
+primeMax = 1200000
+
 
 # create ordered list of primes
 # Seive of Erastothenes approach
@@ -104,43 +104,58 @@ we can stop at the first one we find.
 '''
 
 
-primeSums = [sum(primeList[x-minSize:x-1]) for x in range(minSize,len(primeList)+1)]
-upToMax = [x for x in primeSums if (x < primeMax)]
-primeIndex = len(upToMax)+minSize
 
-print("Only need to consider first %s primes if sum < %s" % (primeIndex, primeMax))
+def findPrimeSum(primeMax, minSize, primeList):
 
-# Trim primeList
-primeList = primeList[:primeIndex]
+    primeSums = [sum(primeList[x-minSize:x-1]) for x in range(minSize,len(primeList)+1)]
+    upToMax = [x for x in primeSums if (x < primeMax)]
+    primeIndex = len(upToMax)+minSize
+
+    print("Only need to consider first %s primes if sum < %s and minimum length %s" % (primeIndex, primeMax, minSize))
+
+    # Trim primeList
+    shortList = primeList[:primeIndex]
 
 
-start_time = time.time()
+    start_time = time.time()
 
-maxLen = len(primeList)
+    maxLen = len(shortList)
 
-for seqSize in range(maxLen, 0, -1):
+    for seqSize in range(maxLen, 0, -1):
 
-    sumList = [sum(primeList[a-seqSize:a]) for a in range(seqSize, maxLen+1)]
+        sumList = [sum(shortList[a-seqSize:a]) for a in range(seqSize, maxLen+1)]
 
-    if sumList[0] > primeMax:  # ignore this list if the smallest sum is still bigger than maximum prime
-        continue
+        if sumList[0] > primeMax:  # ignore this list if the smallest sum is still bigger than maximum prime
+            continue
 
-    offset = [sumList.index(x) for x in sumList if ((x < primeMax) and (x in primeSet))]
+        offset = [sumList.index(x) for x in sumList if ((x < primeMax) and (x in primeSet))]
 
-    if len(offset) > 0:
-        # Found max sum
-        maxList = primeList[offset[-1]:offset[-1]+seqSize]
-        maxSum = sumList[offset[-1]]
-        break
-    else:
-        continue
-    break # Will exit the outer loop if the inner loop breaks
+        if len(offset) > 0:
+            # Found max sum
+            maxList = shortList[offset[-1]:offset[-1]+seqSize]
+            maxSum = sumList[offset[-1]]
+            break
+        else:
+            continue
+        break # Will exit the outer loop if the inner loop breaks
 
-print("Maximum length sum of primes that is also prime below %s:" % primeMax)
-print(maxList)
-print("%s primes with total sum: %s " % (len(maxList),maxSum))
-print("---Completed in %s seconds---" %(time.time() - start_time))
+    print("Maximum length sum of primes that is also prime below %s:" % primeMax)
+    print(maxList)
+    print("%s primes with total sum: %s " % (len(maxList),maxSum))
+    print("---Completed in %s seconds---" %(time.time() - start_time))
 
+    return len(maxList)
+
+
+minSize = 0
+maxIndex = int(log10(primeMax))
+
+for p in [10**x for x in range(1,maxIndex+1)]:
+    myList = [x for x in primeList if (x < p)]
+    minSize = findPrimeSum(p, minSize, myList)
+
+if (primeMax % 10**maxIndex != 0):
+    minSize = findPrimeSum(primeMax, minSize, primeList)
 
 
 
