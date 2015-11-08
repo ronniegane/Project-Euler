@@ -1,7 +1,7 @@
 # PyCharm support files #
 #########################
 .idea/
-__pychache__/
+__pycache__/
 
 
 
