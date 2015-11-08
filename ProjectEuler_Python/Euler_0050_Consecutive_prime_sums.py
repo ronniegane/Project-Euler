@@ -19,31 +19,44 @@ of the most consecutive primes?'''
 # calculating primes below 1,000,000 only takes 0.28 seconds, so not a huge bottleneck
 
 from math import sqrt, log10
-
-# Timing code
 import time
-start_time = time.time()
 
-# SEARCH PARAMETERS
-primeMax = 1200000
+def main():
+    global primeSet
+
+    # Timing code
+    start_time = time.time()
+
+    # SEARCH PARAMETERS
+    primeMax = 1200000
 
 
-# create ordered list of primes
-# Seive of Erastothenes approach
-# Start with all numbers 2-1million (or other maximum)
+    # create ordered list of primes
+    # Seive of Erastothenes approach
+    # Start with all numbers 2-1million (or other maximum)
 
-mySieve = [False,False,True]+[True, False]*primeMax # all odd numbers and 2 start as prime
+    mySieve = [False,False,True]+[True, False]*primeMax # all odd numbers and 2 start as prime
 
-for i in range(3,int(sqrt(primeMax))+1,2):
-    if mySieve[i]:
-        for mult in range(2*i, primeMax, i):
-            mySieve[mult] = False
+    for i in range(3,int(sqrt(primeMax))+1,2):
+        if mySieve[i]:
+            for mult in range(2*i, primeMax, i):
+                mySieve[mult] = False
 
-primeList = [2] + [i for i in range(3, primeMax, 2) if mySieve[i]]
-primeSet = set(primeList)  # Create a set for checking if a sum is prime
+    primeList = [2] + [i for i in range(3, primeMax, 2) if mySieve[i]]
+    primeSet = set(primeList)  # Create a set for checking if a sum is prime
 
-print("Primes up to %s: found %s primes" % (primeMax, len(primeList)))
-print("---Completed in %s seconds---" %(time.time() - start_time))
+    print("Primes up to %s: found %s primes" % (primeMax, len(primeList)))
+    print("---Completed in %s seconds---" %(time.time() - start_time))
+
+    minSize = 0
+    maxIndex = int(log10(primeMax))
+
+    for p in [10**x for x in range(1,maxIndex+1)]:
+        myList = [x for x in primeList if (x < p)]
+        minSize = findPrimeSum(p, minSize, myList)
+
+    if (primeMax % 10**maxIndex != 0):
+        minSize = findPrimeSum(primeMax, minSize, primeList)
 
 # Making a dictionary for lookup
 # primeDict = {x: mySieve[x] for x in range(primeMax)}
@@ -147,15 +160,8 @@ def findPrimeSum(primeMax, minSize, primeList):
     return len(maxList)
 
 
-minSize = 0
-maxIndex = int(log10(primeMax))
-
-for p in [10**x for x in range(1,maxIndex+1)]:
-    myList = [x for x in primeList if (x < p)]
-    minSize = findPrimeSum(p, minSize, myList)
-
-if (primeMax % 10**maxIndex != 0):
-    minSize = findPrimeSum(primeMax, minSize, primeList)
+if __name__ == '__main__':
+    main()
 
 
 
